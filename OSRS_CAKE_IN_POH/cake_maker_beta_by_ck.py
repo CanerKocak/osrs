@@ -5,11 +5,15 @@ import random
 
 bot_speed = 12
 
+def random_sleeps(sleep_count):
+    for i in range(sleep_count)
+        random_sleep()
+
 def smooth_click(position):
     x = position[0] + random.randint(-(random.randint(1,8)),(random.randint(1,8)))
     y = position[1] + random.randint(-(random.randint(1,8)),(random.randint(1,8)))
     position = (x, y)
-    random_sleep()
+    random_sleeps(1)
     py.moveTo(position, duration=random.randint(1,10)/bot_speed)
     py.click(position)
 
@@ -48,7 +52,7 @@ def get_cake_supplies_pos():
                 supply_positions.append(position)
                 if len(supply_positions) == 3:
                     return supply_positions
-                random_sleep()
+                random_sleeps(1)
                 break
  
 def click_on_oak_larder():
@@ -58,20 +62,17 @@ def click_on_oak_larder():
         pos,bool = find_items("oak_larder",0.4)
         if number == "2":
             smooth_click(pos)
-            random_sleep()
+            random_sleeps(1)
             pos2, bool2 = find_items("option",0.95)
         pos,bool = find_items("oak_larder",0.4)
         py.moveTo(pos)
         for i in range(item_count):
-            random_sleep()
-            random_sleep()
-            random_sleep()
+            random_sleeps(3)
             py.click(pos)
             pos2, bool2 = find_items("option",0.95)
-            random_sleep()
-            random_sleep()
+            random_sleeps(2)
             py.keyDown(number)
-            random_sleep()
+            random_sleeps(1)
             py.keyUp(number)
             
         
@@ -104,14 +105,14 @@ def make_uncooked_cake(supply):
     cake_tin_position, found_bool = find_items("cake_tin")
     if found_bool == True:
         smooth_click(cake_tin_position)
-        random_sleep()
+        random_sleeps(1)
         smooth_click(supply)
         sleep(0.5)
     position3, found_bool3 = find_items("make_cake",0.7)
     if found_bool3 == True:
         py.press("space")
         sleep(random.randint(12,14))
-        random_sleep()
+        random_sleeps(1)
  
 def cook_cake():
     print("Cooking cake...")
@@ -119,28 +120,28 @@ def cook_cake():
         position, found_bool = find_items("uncooked_cake")
         if found_bool == True:
             smooth_click(position)
-            random_sleep()
-            position2, found_bool2 = find_items("steel_range",0.4)
-            if found_bool2 == True:
-                smooth_click(position2)
-                random_sleep()
-                position3, found_bool3 = find_items("make_cake")
-                if found_bool3 == True:
-                    py.press("space")
-                    sleep(random.randint(18,20))
-                    position, found_bool = find_items_to_drop("uncooked_cake")
-                    if found_bool == True:
-                        print("you leveled up!")
-                        position, found_bool = find_items("uncooked_cake")
-                        if found_bool == True:
-                            smooth_click(position)
-                        random_sleep()
-                        position2, found_bool2 = find_items("steel_range1",0.4)
-                        if found_bool2 == True:
-                            smooth_click(position2)
-                            sleep(random.randint(5,10))
-                            py.press("space")
-                            sleep(random.randint(14,20))
+            random_sleeps(1)
+            steel_range_pos, steel_range = find_items("steel_range",0.4)
+        if steel_range == True:
+            smooth_click(steel_range_pos)
+            random_sleeps(1)
+            make_cake_pos, make_cake = find_items("make_cake")
+        if make_cake == True:
+            py.press("space")
+            sleep(random.randint(18,20))
+            items_to_drop_pos, items_to_drop = find_items_to_drop("uncooked_cake")
+        if items_to_drop == True:
+            print("you leveled up!")
+            uncooked_cake_pos, uncooked_cake = find_items("uncooked_cake")
+        if uncooked_cake == True:
+            smooth_click(uncooked_cake_pos)
+        random_sleeps(1)
+        position2, found_bool2 = find_items("steel_range1",0.4)
+        if found_bool2 == True:
+            smooth_click(position2)
+            sleep(random.randint(5,10))
+            py.press("space")
+            sleep(random.randint(14,20))
                 break
 
 def bot():
@@ -148,14 +149,11 @@ def bot():
     click_on_oak_larder()
     supply_positions = get_cake_supplies_pos()
     make_uncooked_cake(random.choice(supply_positions))
-    random_sleep()
+    random_sleeps(1)
     cook_cake()
     drop_items()
     drop_items()
-    random_sleep()
-    random_sleep()
-    random_sleep()
-    
+    random_sleeps(1)
 
 while True:
     bot()
